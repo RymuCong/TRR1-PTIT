@@ -39,15 +39,15 @@ int main()
     string s,p;
     for(int i=0;i<m;i++)
     {
-        s+="N";
-        cout<<"N ";
-        p = "N" + p;
+        s+="H";
+        cout<<"H ";
+        p = "H" + p;
     }
     for(int i=0;i<n;i++)
     {
-        s+="D";
-        cout<<"D ";
-        p="D"+p;
+        s+="V";
+        cout<<"V ";
+        p="V"+p;
     }cout<<endl;
     int k=n+m;
     while(true)
@@ -55,15 +55,15 @@ int main()
         int d=0;
         for(int i=k;i>=0;i--)
         {
-            if(s[i]=='D')
+            if(s[i]=='V')
             d++;
-            else if(s[i]=='N'&&d>0)
+            else if(s[i]=='H'&&d>0)
             {
-                s[i]='D';
+                s[i]='V';
                 for(int j=i+1;j<=k;j++)
-                s[j]='N';
+                s[j]='H';
                 for(int j=k-d+1;j<k;j++)
-                s[j]='D';
+                s[j]='V';
                 break;
             }
         }
