@@ -16,40 +16,82 @@ Ví dụ với k=3, n=5 ta có output như sau:
 1 1 1 0 1
 */
 
-#include <stdio.h>
-int nextToHop(int X[], int Y[], int k, int n)
+#include <iostream>
+#include <stdbool.h>
+#include <string>
+using namespace std;
+bool check(string s,string p1,int m,string p2,int k)
 {
-    int i, t, cauhinhcuoi = 1;
-    for (i = k; i >= 1; i--)
-        if (X[i] != n - k + i) // 1 2 3
-        {
-            t = i;
-            cauhinhcuoi = 0;
-            break;
-        }
-    if (cauhinhcuoi == 1)
-        return 1;
-    for (i = 1; i <= t - 1; i++)
-        Y[i] = X[i];
-    Y[t] = X[t] + 1;
-    for (i = t + 1; i <= k; i++)
-        Y[i] = Y[t] + (i - t);
-    return 0;
+    int d=0;
+    string x=s;
+    while(s.find(p1)<=s.size() && s[s.find(p1)+m]!='1')
+    {
+        d++;
+        if(d>1) return false;
+        s.erase(s.find(p1),m);
+    }
+    if(d==0) return false;
+    while(x.find(p2)< x.size()&&x[x.find(p2)+k]!='0')
+    {
+        d++;
+        if(d>2) return false;
+        x.erase(x.find(p2),k);
+    }
+    if(d==2) return true;
+    else return false;
 }
 int main()
 {
-    int k, n, i, X[20], Y[20], cauhinhcuoi;
-    scanf("%d%d", &k, &n);
-    //  Cấu hình bắt đầu
-    for (i = 1; i <= k; i++)
-        X[i] = i;
-    do
+    string s,p;
+    int n,k,m;
+    cin>>k>>m>>n;
+    for(int i=0;i<m;i++)
     {
-        for (i = 1; i <= k; i++)
-            printf("%d ", X[i]);
-        printf("\n");
-        cauhinhcuoi = nextToHop(X, Y, k, n);
-        for (i = 1; i <= k; i++)
-            X[i] = Y[i];
-    } while (cauhinhcuoi == 0);
+        s+="1";
+        p+="1";
+    }
+    for(int i=0;i<k;i++)
+    {
+        s="0"+s;
+        p+="0";
+    }
+    int d1=0,d2=0;
+    for(int i=0;i<n-m-k;i++)
+    {
+        s+="0";
+        d1++;
+        if(d2%2==0)
+        {
+            if(d1<m) p+="1";
+            else{
+                p+="0";
+                d2++;
+                d1=1;
+            }
+        }
+    }
+    string h1,h2;
+    for(int i=0;i<m;i++) h1+="1";
+    for(int i=0;i<k;i++) h2+="0";
+    while(true){
+        if(check(s,h1,m,h2,k)==true){
+            for(int i=0;i<n;i++)
+            cout<<s[i]<<" ";
+            cout<<endl;
+        }
+        for(int i=n-1;i>=0;i--)
+        {
+            if(s[i]=='0')
+            {
+                s[i]='1';
+                for(int j=i+1;j<n;j++)
+                s[j]='0';
+                break;
+            }
+        }
+        if(s==p) break;
+    }
+    for(int i=0;i<n;i++) cout<<s[i]<<" ";
+    cout<<endl;
+    return 0;
 }
