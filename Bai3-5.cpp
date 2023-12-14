@@ -20,65 +20,58 @@ Ví dụ với k=3, n=5 ta có output như sau:
 #include <stdbool.h>
 #include <string>
 using namespace std;
-bool check(string s,string p1,int m,string p2,int k)
+bool check(string s,string p,int k)
 {
     int d=0;
-    string x=s;
-    while(s.find(p1)<=s.size() && s[s.find(p1)+m]!='1')
+    while(s.find(p)<=s.size()&& s[s.find(p)+k]!='1')
     {
         d++;
-        if(d>1) return false;
-        s.erase(s.find(p1),m);
+        s.erase(s.find(p),k);
+        if(d>1)
+        return false;
     }
-    if(d==0) return false;
-    while(x.find(p2)< x.size()&&x[x.find(p2)+k]!='0')
-    {
-        d++;
-        if(d>2) return false;
-        x.erase(x.find(p2),k);
-    }
-    if(d==2) return true;
-    else return false;
+    if(d==1)
+    return true;
+    else
+    return false;
 }
 int main()
 {
     string s,p;
-    int n,k,m;
-    cin>>k>>m>>n;
-    for(int i=0;i<m;i++)
+    int n,k;
+    cin>>k>>n;
+    for(int i=n-k;i<n;i++)
     {
         s+="1";
-        p+="1";
+        p="1"+p;
     }
-    for(int i=0;i<k;i++)
+    if(k<n)
+    p+="0";
+    int d=0;
+    for(int i=0;i<n-k;i++)
     {
         s="0"+s;
+        d++;
+        if(d<k)
+        p+="1";
+        else{
         p+="0";
+        d=0;
+        }
     }
-    int d1=0,d2=0;
-    for(int i=0;i<n-m-k;i++)
+    p.erase(n,1);
+    for(int i=0;i<n;i++)
     {
-        s+="0";
-        d1++;
-        if(d2%2==0)
-        {
-            if(d1<m) p+="1";
-            else{
-                p+="0";
-                d2++;
-                d1=1;
-            }
-        }
+        cout<<s[i]<<" ";
     }
-    string h1,h2;
-    for(int i=0;i<m;i++) h1+="1";
-    for(int i=0;i<k;i++) h2+="0";
-    while(true){
-        if(check(s,h1,m,h2,k)==true){
-            for(int i=0;i<n;i++)
-            cout<<s[i]<<" ";
-            cout<<endl;
-        }
+    cout<<endl;
+    string h;
+    for(int i=0;i<k;i++)
+    {
+        h+="1";
+    }
+    while(true)
+    {
         for(int i=n-1;i>=0;i--)
         {
             if(s[i]=='0')
@@ -89,9 +82,13 @@ int main()
                 break;
             }
         }
-        if(s==p) break;
+        if(check(s,h,k)==true)
+        {
+            for(int i=0;i<n;i++)
+            cout<<s[i]<<" ";cout<<endl;
+        }
+        if(s==p)
+        break;
     }
-    for(int i=0;i<n;i++) cout<<s[i]<<" ";
-    cout<<endl;
-    return 0;
 }
+
