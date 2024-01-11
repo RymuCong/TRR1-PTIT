@@ -1,5 +1,5 @@
 /*
-Chuỗi ký tự X = (X1, X2, . . ., Xn) được gọi là chuỗi ký tự AB nếu x; = ‘A’ hoặc x = ‘B’. 
+Chuỗi ký tự X = (X1, X2, . . ., Xn) được gọi là chuỗi ký tự AB nếu x; = ‘A’ hoặc x = ‘B’.
 Chuỗi X được gọi là chuỗi AB bậc k nếu X tồn tại duy nhất một dãy k kí tự A liên tiếp.
 Hãy liệt kê tất cả các chuỗi AB bậc k.
 
@@ -15,57 +15,61 @@ A  A  A  A  B  B
 
 A  A  A  A  B  A
 */
-#include <stdio.h>
-#include <stdlib.h>
-int is_AB_degree_k(char*s,int n,int k){
-    int count=0;
-    int flag=0;
-    for(int i=0;i<n;i++)
+
+#include <iostream>
+using namespace std;
+
+int a[100], m, n, ok = 1;
+
+void in()
+{
+    for (int i = 1; i <= n; i++)
+        cout << (char)(a[i]+65) << " ";
+    cout << endl;
+}
+
+void sinhNP ()
+{
+    int i = n;
+    while (i > 0 && a[i] == 1) // a[i] == 'B'
+        i--;
+    if (i == 0)
+        ok = 0;
+    for (int j = i; j <= n; j++)
+        a[j] = 1 - a[i];
+}
+
+int check ()
+{
+    int dem = 0;
+    for (int i = 1; i <= n; i++)
     {
-        if(s[i]=='A'){
-            count++;
+        if (a[i] == 0)
+        {
+            dem++;
+            if (dem > m)
+                return 0;
         }
-        else{
-            if(count == k){
-                flag++;
-            }
-            count=0;
+        else
+        {
+            if (dem == m)
+                return 1;
+            dem = 0;
         }
     }
-    if(count == k){
-        flag++;
-    }
-    return flag==1;
+    return dem == m;
 }
-void generate_AB_degree_k(int n,int k){
-    char*s=(char*)malloc((n+1)*sizeof(char));
-    for(int i=0;i<n;i++){
-        s[i]='B';
+
+int main()
+{
+    cin >> m >> n;
+    for (int i = 1; i <= n; i++)
+        //a[i] = (int)'A';
+        a[i] = 0;
+    while (ok)
+    {
+        if (check())
+            in();
+        sinhNP();
     }
-    s[n]='\0';
-    int stop=0;
-    while(!stop){
-        if(is_AB_degree_k(s,n,k)){
-            for(int i=0;i<n;i++)
-            {
-                printf ("%c ",s[i]);
-            }
-            printf("\n");
-        }
-        int i=n-1;
-        while(i>=0&&s[i]=='A'){
-            s[i]='B';
-            i--;
-        }
-        if(i>=0){
-            s[i]='A';
-        }
-        else stop=1;
-    }
-    free(s);
-}
-int main(){
-    int m,n;
-    scanf("%d%d",&m,&n);
-    generate_AB_degree_k(n,m);
 }
