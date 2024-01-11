@@ -1,5 +1,5 @@
-/* 
-Bài 3.3. Liệt kê tất cả các xâu nhị phân độ dài n thỏa mãn điều kiện mỗi xâu có duy nhất 1 dãy k bít 1 liên tiếp; k, n nhập từ bàn phím
+/*
+Bài 3.5. Liệt kê tất cả các xâu nhị phân độ dài n thỏa mãn điều kiện mỗi xâu có duy nhất 1 dãy k bít 1 liên tiếp; k, n nhập từ bàn phím
 
 Nhập k, n từ bàn phím.
 
@@ -17,78 +17,58 @@ Ví dụ với k=3, n=5 ta có output như sau:
 */
 
 #include <iostream>
-#include <stdbool.h>
-#include <string>
 using namespace std;
-bool check(string s,string p,int k)
+
+int a[100], k, n, ok = 1;
+
+void in()
 {
-    int d=0;
-    while(s.find(p)<=s.size()&& s[s.find(p)+k]!='1')
-    {
-        d++;
-        s.erase(s.find(p),k);
-        if(d>1)
-        return false;
-    }
-    if(d==1)
-    return true;
-    else
-    return false;
-}
-int main()
-{
-    string s,p;
-    int n,k;
-    cin>>k>>n;
-    for(int i=n-k;i<n;i++)
-    {
-        s+="1";
-        p="1"+p;
-    }
-    if(k<n)
-    p+="0";
-    int d=0;
-    for(int i=0;i<n-k;i++)
-    {
-        s="0"+s;
-        d++;
-        if(d<k)
-        p+="1";
-        else{
-        p+="0";
-        d=0;
-        }
-    }
-    p.erase(n,1);
-    for(int i=0;i<n;i++)
-    {
-        cout<<s[i]<<" ";
-    }
-    cout<<endl;
-    string h;
-    for(int i=0;i<k;i++)
-    {
-        h+="1";
-    }
-    while(true)
-    {
-        for(int i=n-1;i>=0;i--)
-        {
-            if(s[i]=='0')
-            {
-                s[i]='1';
-                for(int j=i+1;j<n;j++)
-                s[j]='0';
-                break;
-            }
-        }
-        if(check(s,h,k)==true)
-        {
-            for(int i=0;i<n;i++)
-            cout<<s[i]<<" ";cout<<endl;
-        }
-        if(s==p)
-        break;
-    }
+    for (int i = 1; i <= n; i++)
+        cout << a[i] << " ";
+    cout << endl;
 }
 
+void sinhNP ()
+{
+    int i = n;
+    while (i > 0 && a[i] == 1)
+        i--;
+    if (i == 0)
+        ok = 0;
+    for (int j = i; j <= n; j++)
+        a[j] = 1 - a[i];
+}
+
+int check ()
+{
+    int dem = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        if (a[i] == 1)
+        {
+            dem++;
+            if (dem > k)
+                return 0;
+        }
+        else
+        {
+            if (dem == k)
+                return 1;
+            dem = 0;
+        }
+    }
+    return dem == k;
+}
+
+int main()
+{
+    cin >> k >> n;
+    for (int i = 1; i <= n; i++)
+        a[i] = 0;
+    while (ok)
+    {
+        if (check())
+            in();
+        sinhNP();
+    }
+}
